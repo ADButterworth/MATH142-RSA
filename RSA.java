@@ -7,8 +7,7 @@ class RSA {
 	static Random rngsus = new Random();
 	
 	public static void main(String[] args) {
-		BigInteger prime1, prime2, product, phiN, d;
-		BigInteger k = BigInteger.valueOf(rngsus.nextInt(100) + 1000);
+		BigInteger prime1, prime2, product, phiN, d, k;
 		BigInteger[] encMessage; 
 		
 		File file = new File("msg.txt");
@@ -23,7 +22,8 @@ class RSA {
 		// PROCESSING
 		product = prime1.multiply(prime2);
 		phiN = (prime1.subtract(BigInteger.ONE)).multiply(prime2.subtract(BigInteger.ONE));
-		
+
+		k = BigInteger.valueOf(rngsus.nextInt(100) + 2);
 		while(!phiN.gcd(k).equals(BigInteger.ONE)) {
 			k = k.add(BigInteger.ONE);
 		}
