@@ -72,13 +72,23 @@ class RSA {
 	  	}
 
 	  	// cycle over the byte array and encrypt each character
-	  	System.out.println("\n\nENCRYPTED MESSAGE: ");
+	  	System.out.println("\n\nENCRYPTION PROCESS: ");
 	  	for(int a = 0; a < (int)file.length(); a++) {
 	  		bigIntFile[a] = BigInteger.valueOf(bFile[a]);
 
 	  		// encrypted data = (data ^ key) mod(product)
 	  		bigIntFile[a] = bigIntFile[a].modPow(key, product);
-	  		System.out.print(bigIntFile[a].toString() + " ");
+	  		if(bFile[a] < 100) {
+	  			System.out.println(bFile[a] + "  -> " + bigIntFile[a].toString());
+	  		}
+	  		else {
+	  			System.out.println(bFile[a] + " -> " + bigIntFile[a].toString());
+	  		}
+	  	}
+
+	  	System.out.println("\nENCRYPTED MESSAGE: ");
+	  	for(BigInteger b : bigIntFile) {
+	  		System.out.print(b.toString() + " ");
 	  	}
 
 	  	return bigIntFile;
