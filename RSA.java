@@ -21,12 +21,17 @@ class RSA {
 
 		// PROCESSING
 		product = prime1.multiply(prime2);
+
+		// phi(N) = (p - 1)(q - 1)
 		phiN = (prime1.subtract(BigInteger.ONE)).multiply(prime2.subtract(BigInteger.ONE));
 
+		// guess a starting value for the primes so a different one is used each time
 		k = BigInteger.valueOf(rngsus.nextInt(100) + 2);
+		// cycle upwards untill a coprime is found
 		while(!phiN.gcd(k).equals(BigInteger.ONE)) {
 			k = k.add(BigInteger.ONE);
 		}
+		// calculate the other coprime from the first
 		d = k.modInverse(phiN);
 
 		// OUTPUT
@@ -44,28 +49,34 @@ class RSA {
 	private static BigInteger[] encrypt(File file, BigInteger key, BigInteger product) {
 		FileInputStream fileInputStream = null;
 		byte[] bFile = new byte[(int) file.length()];
+
+		// bigint array to store encrypted message as the numbers can become very large
 		BigInteger[] bigIntFile = new BigInteger[(int) file.length()];
 
 		try
 		{
-			//convert file into array of bytes
+			// convert whole file into array of bytes
 			fileInputStream = new FileInputStream(file);
 			fileInputStream.read(bFile);
 			fileInputStream.close();
 	  	}
 	  	catch (Exception e)
 	  	{
-			e.printStackTrace();
+			System.out.println("\nFATAL ERROR: \"msg.txt\" NOT FOUND");
 	  	}
 	  	
+	  	// print the message as numeric values
 	  	System.out.println("\nMESSAGE: ");
 	  	for(byte b : bFile) {
 	  		System.out.print("" + b + " ");
 	  	}
 
+	  	// cycle over the byte array and encrypt each character
 	  	System.out.println("\n\nENCRYPTED MESSAGE: ");
 	  	for(int a = 0; a < (int)file.length(); a++) {
 	  		bigIntFile[a] = BigInteger.valueOf(bFile[a]);
+
+	  		// encrypted data = (data ^ key) mod(product)
 	  		bigIntFile[a] = bigIntFile[a].modPow(key, product);
 	  		System.out.print(bigIntFile[a].toString() + " ");
 	  	}
@@ -75,7 +86,10 @@ class RSA {
 
 	private static void decrypt(BigInteger[] data, BigInteger key, BigInteger product) {
 		System.out.println("\n\nDECRYPTED MESSAGE: ");
+
+		// cycle over the given array and decrypt each element
 	  	for(int a = 0; a < data.length; a++) {
+	  		// decrypted data = (encData ^ key) mod(product)
 	  		data[a] = data[a].modPow(key, product);
 	  		System.out.print(data[a].toString() + " ");
 	  	}
